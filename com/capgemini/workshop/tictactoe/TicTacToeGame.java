@@ -1,5 +1,6 @@
 package com.capgemini.workshop.tictactoe;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class TicTacToeGame {		
@@ -18,27 +19,31 @@ public class TicTacToeGame {
 			computer = 'X';
 		
 		showBoard(board);
-		userSelectIndex(board, userChoice);
+		makeMove(board, userChoice);
 	}
+	
+	private static void makeMove(char[] board, char userChoice) {
+		int position = userSelectIndex(board);
+		board[position] = userChoice;
+		showBoard(board);
+	}
+
 	// Select Index for Player
-	private static void userSelectIndex(char[] board, char userChoice) {
+	private static int userSelectIndex(char[] board) {
 		Scanner sc = new Scanner(System.in);
 		boolean available = false;
+		int position = 0;
+		Integer [] validCells = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 		do {
 		System.out.println("Choose a Desired Location on Board from 1 to 9 :");
-		int position = sc.nextInt();
-		if(board[position]==' ') {
-			board[position] = userChoice;
+		position = sc.nextInt();
+		if(board[position]==' ' && Arrays.asList(validCells).contains(position)) 
 			available = true;
-		}
-		else 
-			System.out.println("Invalid Position or Position Occupied. Try Again");
-		}while(available==false);
-		
-		showBoard(board);	
+		else
+			System.out.println("Invalid Location. Choose from 1 to 9");
+		}while(available==false);	
+		return position;
 	}
-		
-
 	// Create Board and Assign Empty Spaces
 	private static char[] createBoard() {
 		char [] board = new char[10];
