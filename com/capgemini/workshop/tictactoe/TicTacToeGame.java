@@ -7,14 +7,14 @@ public class TicTacToeGame {
 	// Constants
 	private final static int TAIL = 0;
 	private final static int HEAD = 1;
-	
-	public static void main(String[] args) {
-		//variables
-		char computer = ' ';
-	
-		char [] board = createBoard();
-		char userChoice = chooseUserLetter();
-		
+	// Variables
+	private static char computer;
+	private static char[] board;
+	private static char userChoice;
+
+	public static void main(String[] args) {	
+		board = createBoard();
+		userChoice = chooseUserLetter();	
 		// Assigning Letter to Computer
 		if(userChoice == 'X')
 			computer = 'O';
@@ -22,17 +22,53 @@ public class TicTacToeGame {
 			computer = 'X';
 		
 		int gameToss = toss();
-		chooseFirstPlayer(gameToss, board, userChoice, computer);
+		chooseFirstPlayer(gameToss);
 	}
 	// Choose The First Player
-	private static void chooseFirstPlayer(int gameToss, char[] board, char userChoice, char computer) {
+	private static void chooseFirstPlayer(int gameToss) {
 		if(gameToss == HEAD) {
 			System.out.println("User Plays First");
-			makeMove(board, userChoice);
+			gameVerdict(gameToss);
 		}
 		if(gameToss == TAIL) {
 			System.out.println("Computer Plays First");
-			makeMove(board, computer);		
+			gameVerdict(gameToss);
+		}
+	}
+	// Game Verdict Winner, Tie, Next Move
+	private static void gameVerdict(int gameToss) {
+		
+		if(gameToss == HEAD) {
+			makeMove(board, userChoice);
+		}
+		else if(gameToss == TAIL) {
+			makeMove(board, computer);
+		}
+		
+		if((board[1]==board[2] && board[2]==board[3] && board[1]!=' ') || (board[4]==board[5] && board[5]==board[6] && board[6]!=' ') || (board[7]==board[8] && board[8]==board[9] && board[9]!=' ') 
+				|| (board[1]==board[4] && board[4]==board[7] && board[7]!=' ') || (board[2]==board[5] && board[5]==board[8] && board[8]!=' ') || (board[3]==board[6] && board[6]==board[9] && board[9]!=' ') ||
+				(board[1]==board[5] && board[5]==board[9] && board[9]!=' ') || (board[3]==board[5] && board[5]==board[7] && board[7]!=' ')) {
+			if(gameToss==HEAD)
+				System.out.println("Winner is User");
+			if(gameToss==TAIL)
+				System.out.println("Winner is Computer");
+			System.exit(0);
+		}
+		else { if(board[1]!=' ' && board[2]!=' ' && board[3]!=' ' && board[4]!=' ' &&
+				board[5]!=' ' && board[6]!=' ' && board[7]!=' ' && board[8]!=' ' && board[9]!=' ') {
+			System.out.println("Tie");
+			System.exit(0);
+		}
+		else {
+			if(gameToss == HEAD) {
+				gameToss--;
+				gameVerdict(gameToss);
+			}
+			else if(gameToss == TAIL) {
+				gameToss++;
+				gameVerdict(gameToss);
+			}
+		}
 		}
 	}
 	// Toss of Head & Tail. Head - User, Tail - Computer
@@ -42,8 +78,19 @@ public class TicTacToeGame {
 	}
 	//Make Move on Board
 	private static void makeMove(char[] board, char Choice) {
+		boolean empty = false;
+		if(Choice==userChoice) {
 		int position = userSelectIndex(board);
 		board[position] = Choice;
+		}
+		else {
+		do {
+		int position = (int)(Math.floor((Math.random()*10)%9)+1);
+		empty = isSpaceFree(board, position);
+		if(empty)
+			board[position] = Choice;	
+		}while(empty==false);
+		}
 		showBoard(board);
 	}
 	// Select Index for Player
@@ -55,12 +102,16 @@ public class TicTacToeGame {
 		do {
 		System.out.println("Choose a Desired Location on Board from 1 to 9 :");
 		position = sc.nextInt();
-		if(board[position]==' ' && Arrays.asList(validCells).contains(position)) 
+		if(isSpaceFree(board, position) && Arrays.asList(validCells).contains(position)) 
 			available = true;
 		else
 			System.out.println("Invalid Location. Choose from 1 to 9");
 		}while(available==false);	
 		return position;
+	}
+	
+	public static boolean isSpaceFree(char[] board, int position) {
+		return board[position]==' ';
 	}
 	// Create Board and Assign Empty Spaces
 	private static char[] createBoard() {
@@ -72,7 +123,7 @@ public class TicTacToeGame {
 	// Selection of Letter by User 
 	private static char chooseUserLetter()
 	{	Scanner sc = new Scanner(System.in);
-		System.out.println("Choose Your Letter X or O");
+		System.out.println("Choose Your User Letter X or O");
 		char userChoice = sc.next().charAt(0);
 		return userChoice;
 	}
