@@ -3,8 +3,11 @@ package com.capgemini.workshop.tictactoe;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class TicTacToeGame {		
-
+public class TicTacToeGame {	
+	// Constants
+	private final static int TAIL = 0;
+	private final static int HEAD = 1;
+	
 	public static void main(String[] args) {
 		//variables
 		char computer = ' ';
@@ -18,16 +21,31 @@ public class TicTacToeGame {
 		else
 			computer = 'X';
 		
-		showBoard(board);
-		makeMove(board, userChoice);
+		int gameToss = toss();
+		chooseFirstPlayer(gameToss, board, userChoice, computer);
 	}
-	
-	private static void makeMove(char[] board, char userChoice) {
+	// Choose The First Player
+	private static void chooseFirstPlayer(int gameToss, char[] board, char userChoice, char computer) {
+		if(gameToss == HEAD) {
+			System.out.println("User Plays First");
+			makeMove(board, userChoice);
+		}
+		if(gameToss == TAIL) {
+			System.out.println("Computer Plays First");
+			makeMove(board, computer);		
+		}
+	}
+	// Toss of Head & Tail. Head - User, Tail - Computer
+	private static int toss() {
+		int gameToss = (int)(Math.floor(Math.random()*10)%2);
+		return gameToss;		
+	}
+	//Make Move on Board
+	private static void makeMove(char[] board, char Choice) {
 		int position = userSelectIndex(board);
-		board[position] = userChoice;
+		board[position] = Choice;
 		showBoard(board);
 	}
-
 	// Select Index for Player
 	private static int userSelectIndex(char[] board) {
 		Scanner sc = new Scanner(System.in);
