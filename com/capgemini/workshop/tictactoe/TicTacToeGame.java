@@ -219,10 +219,30 @@ public class TicTacToeGame {
 							i=i+2;
 					}
 			}
-		while(position==0) {
-			i = (int)(Math.floor((Math.random()*10)%9)+1);
-			if(isSpaceFree(board, i))
-				position = i;
+		if(position!=0)
+			return position;		
+		else 
+			return computerPlaysLikeMeTakesFourCorners();
+		
+	}
+	private static int computerPlaysLikeMeTakesFourCorners() {
+		int position = 0;
+		if(board[1]==computer && isSpaceFree(board, 9))
+			position = 9;
+		else if(board[3]==computer && isSpaceFree(board, 7))
+			position = 7;
+		else if(board[7]==computer && isSpaceFree(board, 3))
+			position = 3;
+		else if(board[9]==computer && isSpaceFree(board, 1))
+			position = 1;
+		else {
+			while(position==0) {
+				int i = (int)(Math.floor((Math.random()*10)%9)+1);
+				if(i==1 || i==3 || i==7 || i==9) {
+				if(isSpaceFree(board, i))
+					position = i;
+				}
+			}	
 		}
 		return position;
 	}
