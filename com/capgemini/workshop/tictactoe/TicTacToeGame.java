@@ -54,14 +54,14 @@ public class TicTacToeGame {
 				|| (board[1]==board[4] && board[4]==board[7] && board[7]!=' ') || (board[2]==board[5] && board[5]==board[8] && board[8]!=' ') || (board[3]==board[6] && board[6]==board[9] && board[9]!=' ') ||
 				(board[1]==board[5] && board[5]==board[9] && board[9]!=' ') || (board[3]==board[5] && board[5]==board[7] && board[7]!=' ')) {
 			if(gameToss==HEAD)
-				System.out.println("Winner is User");
+				System.out.println("Game Over. Winner is User");
 			if(gameToss==TAIL)
-				System.out.println("Winner is Computer");
+				System.out.println("Game Over. Winner is Computer");
 			System.exit(0);
 		}
 		else { if(board[1]!=' ' && board[2]!=' ' && board[3]!=' ' && board[4]!=' ' &&
 				board[5]!=' ' && board[6]!=' ' && board[7]!=' ' && board[8]!=' ' && board[9]!=' ') {
-			System.out.println("Tie");
+			System.out.println("Game Over. Tie");
 			System.exit(0);
 		}
 		else {
