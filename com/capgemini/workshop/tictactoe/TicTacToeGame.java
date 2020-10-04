@@ -11,8 +11,12 @@ public class TicTacToeGame {
 	private static char computer;
 	private static char[] board;
 	private static char userChoice;
+	private static String game;
 
-	public static void main(String[] args) {	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		do {
+		System.out.println("Welcome. Start of Fresh Game");
 		board = createBoard();
 		userChoice = chooseUserLetter();	
 		// Assigning Letter to Computer
@@ -23,6 +27,9 @@ public class TicTacToeGame {
 		
 		int gameToss = toss();
 		chooseFirstPlayer(gameToss);
+		System.out.println("Do you Want to Play One More Game?(yes/no)");
+		game = sc.next();
+		}while(game.equals("yes"));
 	}
 	// Toss of Head & Tail. Head - User, Tail - Computer
 	private static int toss() {
@@ -42,7 +49,6 @@ public class TicTacToeGame {
 	}
 	// Game Verdict Winner, Tie, Next Move
 	private static void gameVerdict(int gameToss) {
-		
 		if(gameToss == HEAD) {
 			makeMove(userChoice);
 		}
@@ -57,12 +63,10 @@ public class TicTacToeGame {
 				System.out.println("Game Over. Winner is User");
 			if(gameToss==TAIL)
 				System.out.println("Game Over. Winner is Computer");
-			System.exit(0);
 		}
 		else { if(board[1]!=' ' && board[2]!=' ' && board[3]!=' ' && board[4]!=' ' &&
 				board[5]!=' ' && board[6]!=' ' && board[7]!=' ' && board[8]!=' ' && board[9]!=' ') {
 			System.out.println("Game Over. Tie");
-			System.exit(0);
 		}
 		else {
 			if(gameToss == HEAD) {
