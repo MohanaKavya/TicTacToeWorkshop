@@ -85,13 +85,13 @@ public class TicTacToeGame {
 		board[position] = Choice;
 		}
 		else {
-		int position = computerPlaysLikeMe();
+		int position = computerPlaysLikeMeToWin();
 		board[position] = Choice;	
 		}
 		showBoard(board);
 	}
-	// Computers Plays Smart to Win
-	private static int computerPlaysLikeMe() {
+	// Computers Plays Smart to make Next Move to Win
+	private static int computerPlaysLikeMeToWin() {
 		int i = 0, k = 0, count = 0, position = 0;
 		while(k<=6 && position==0) {
 			count = 0;
@@ -130,22 +130,91 @@ public class TicTacToeGame {
 			}
 			k++;
 			}
-		if(position==0 && (board[1]==board[5] || board[5]==board[9] || board[1]==board[9]) 
-			&& (board[1]==computer || board[5]==computer || board[9]==computer)) {
+		if(position==0 && (board[1]==board[5] && board[1]==computer)  || (board[5]==board[9] && board[5]==computer) 
+				||(board[1]==board[9] && board[9]==computer)) {
 					i = 1;
-					while(i<=9) {
+					while(i<=9 && position==0) {
 					if(board[i]!=computer && isSpaceFree(board, i))
 						position = i;
 					else
 						i=i+4;
 				}
 		}
-			if(position==0 && (board[3]==board[5] || board[5]==board[7] || board[3]==board[7]) 
-				&& (board[3]==computer || board[5]==computer || board[7]==computer)) {
+			if(position==0 && (board[3]==board[5] && board[3]==computer)  || (board[5]==board[7] && board[5]==computer) 
+					||(board[3]==board[7] && board[7]==computer)) {
 						i = 3;
-						while(i<=7) {
+						while(i<=7 && position==0) {
 						if(board[i]!=computer && isSpaceFree(board, i))
 							position = i;
+						else
+							i=i+2;
+					}
+			}
+		if(position!=0) {
+			return position;
+		}		
+		else {
+			return computerPlaysLikeMeToBlock();
+		}
+	}
+	// Computer if it cannot Win in Next Move, it Blocks User's Win
+	private static int computerPlaysLikeMeToBlock() {
+		int i = 0, k = 0, count = 0, position = 0;
+		while(k<=6 && position==0) {
+			count = 0;
+		for(i=k+1; i<=k+3; i++) {
+			if(board[i]==userChoice)
+				count++;
+		}
+		if(count==2) {
+			i = i-3;
+			while(count>=0) {
+			if(board[i]!=userChoice && isSpaceFree(board, i))
+				position = i;
+			else
+				i++;
+			count--;
+		}
+		}
+		k = k + 3;
+		}
+		k = 0;
+		while(k<=2 && position==0) {
+			count = 0;
+			for(i=k+1; i<=k+7; i=i+3) {
+				if(board[i]==userChoice)
+					count++;
+			}
+			if(count==2) {
+				i = i-9;
+				while(count>=0) {
+				if(board[i]!=userChoice && isSpaceFree(board, i))
+					position = i;
+				else
+					i=i+3;
+				count--;
+			}
+			}
+			k++;
+			}
+		if(position==0 && (board[1]==board[5] && board[1]==userChoice)  || (board[5]==board[9] && board[5]==userChoice) 
+				||(board[1]==board[9] && board[9]==userChoice)) {
+					i = 1;
+					while(i<=9 && position==0) {
+					if(board[i]!=userChoice && isSpaceFree(board, i))
+						position = i;
+					else
+						i=i+4;
+				}
+		}
+			if(position==0 && (board[3]==board[5] && board[3]==userChoice)  || (board[5]==board[7] && board[5]==userChoice) 
+					||(board[3]==board[7] && board[7]==userChoice)) {
+						i = 3;
+						while(i<=7 && position==0) {
+						if(board[i]!=userChoice && isSpaceFree(board, i)) {
+							position = i;
+							System.out.println("position "+i);
+						}
 						else
 							i=i+2;
 					}
@@ -154,7 +223,7 @@ public class TicTacToeGame {
 			i = (int)(Math.floor((Math.random()*10)%9)+1);
 			if(isSpaceFree(board, i))
 				position = i;
-		}	
+		}
 		return position;
 	}
 	// Select Index for Player
