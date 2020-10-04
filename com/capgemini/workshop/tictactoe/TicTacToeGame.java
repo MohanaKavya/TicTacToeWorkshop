@@ -24,6 +24,11 @@ public class TicTacToeGame {
 		int gameToss = toss();
 		chooseFirstPlayer(gameToss);
 	}
+	// Toss of Head & Tail. Head - User, Tail - Computer
+	private static int toss() {
+		int gameToss = (int)(Math.floor(Math.random()*10)%2);
+		return gameToss;		
+	}
 	// Choose The First Player
 	private static void chooseFirstPlayer(int gameToss) {
 		if(gameToss == HEAD) {
@@ -39,10 +44,10 @@ public class TicTacToeGame {
 	private static void gameVerdict(int gameToss) {
 		
 		if(gameToss == HEAD) {
-			makeMove(board, userChoice);
+			makeMove(userChoice);
 		}
 		else if(gameToss == TAIL) {
-			makeMove(board, computer);
+			makeMove(computer);
 		}
 		
 		if((board[1]==board[2] && board[2]==board[3] && board[1]!=' ') || (board[4]==board[5] && board[5]==board[6] && board[6]!=' ') || (board[7]==board[8] && board[8]==board[9] && board[9]!=' ') 
@@ -62,39 +67,98 @@ public class TicTacToeGame {
 		else {
 			if(gameToss == HEAD) {
 				gameToss--;
+				System.out.println("Computer turn");
 				gameVerdict(gameToss);
 			}
 			else if(gameToss == TAIL) {
 				gameToss++;
+				System.out.println("User turn");
 				gameVerdict(gameToss);
 			}
 		}
+	}
 		}
-	}
-	// Toss of Head & Tail. Head - User, Tail - Computer
-	private static int toss() {
-		int gameToss = (int)(Math.floor(Math.random()*10)%2);
-		return gameToss;		
-	}
 	//Make Move on Board
-	private static void makeMove(char[] board, char Choice) {
-		boolean empty = false;
+	private static void makeMove(char Choice) {
 		if(Choice==userChoice) {
-		int position = userSelectIndex(board);
+		int position = userSelectIndex();
 		board[position] = Choice;
 		}
 		else {
-		do {
-		int position = (int)(Math.floor((Math.random()*10)%9)+1);
-		empty = isSpaceFree(board, position);
-		if(empty)
-			board[position] = Choice;	
-		}while(empty==false);
+		int position = computerPlaysLikeMe();
+		board[position] = Choice;	
 		}
 		showBoard(board);
 	}
+	// Computers Plays Smart to Win
+	private static int computerPlaysLikeMe() {
+		int i = 0, k = 0, count = 0, position = 0;
+		while(k<=6 && position==0) {
+			count = 0;
+		for(i=k+1; i<=k+3; i++) {
+			if(board[i]==computer)
+				count++;
+		}
+		if(count==2) {
+			i = i-3;
+			while(count>=0) {
+			if(board[i]!=computer && isSpaceFree(board, i))
+				position = i;
+			else
+				i++;
+			count--;
+		}
+		}
+		k = k + 3;
+		}
+		k = 0;
+		while(k<=2 && position==0) {
+			count = 0;
+			for(i=k+1; i<=k+7; i=i+3) {
+				if(board[i]==computer)
+					count++;
+			}
+			if(count==2) {
+				i = i-9;
+				while(count>=0) {
+				if(board[i]!=computer && isSpaceFree(board, i))
+					position = i;
+				else
+					i=i+3;
+				count--;
+			}
+			}
+			k++;
+			}
+		if(position==0 && (board[1]==board[5] || board[5]==board[9] || board[1]==board[9]) 
+			&& (board[1]==computer || board[5]==computer || board[9]==computer)) {
+					i = 1;
+					while(i<=9) {
+					if(board[i]!=computer && isSpaceFree(board, i))
+						position = i;
+					else
+						i=i+4;
+				}
+		}
+			if(position==0 && (board[3]==board[5] || board[5]==board[7] || board[3]==board[7]) 
+				&& (board[3]==computer || board[5]==computer || board[7]==computer)) {
+						i = 3;
+						while(i<=7) {
+						if(board[i]!=computer && isSpaceFree(board, i))
+							position = i;
+						else
+							i=i+2;
+					}
+			}
+		while(position==0) {
+			i = (int)(Math.floor((Math.random()*10)%9)+1);
+			if(isSpaceFree(board, i))
+				position = i;
+		}	
+		return position;
+	}
 	// Select Index for Player
-	private static int userSelectIndex(char[] board) {
+	private static int userSelectIndex() {
 		Scanner sc = new Scanner(System.in);
 		boolean available = false;
 		int position = 0;
@@ -109,7 +173,7 @@ public class TicTacToeGame {
 		}while(available==false);	
 		return position;
 	}
-	
+	// Check Free Space
 	public static boolean isSpaceFree(char[] board, int position) {
 		return board[position]==' ';
 	}
