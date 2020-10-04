@@ -244,6 +244,22 @@ public class TicTacToeGame {
 				}
 			}	
 		}
+		if(position!=0)
+			return position;
+		else
+			return computerPlaysLikeMeTakesCenterOrSides();
+	}
+	private static int computerPlaysLikeMeTakesCenterOrSides() {
+		int position = 0;
+		if(isSpaceFree(board, 5))
+			position = 5;
+		else {
+			while(position==0) {
+			int i = (int)(Math.floor((Math.random()*10)%9)+1);
+				if(isSpaceFree(board, i))
+				position = i;
+			}
+		}	
 		return position;
 	}
 	// Select Index for Player
